@@ -29,31 +29,36 @@ public class RepairSchedule {
      * Precondition: 0 <= m < numberOfMechanics and b >= 0
      */
     public boolean addRepair(int m, int b) {
-        for (int i = 0; i < schedule.size(); i++) {
-            if (schedule.get(i).getMechanicNum() == m && schedule.get(i).getBayNum() == b) {
-                return false;
-            }
-            if (schedule.get(i).getMechanicNum() != m && schedule.get(i).getBayNum() != b) {
-                schedule.add(new CarRepair(m,b));
-                return true;
+        boolean bool = true;
+        for (int i = 0; i < schedule.size(); i ++) {
+            CarRepair car = schedule.get(i);
+            if (car.getMechanicNum() == m || car.getBayNum() == b) {
+                bool = false;
             }
         }
-        return false;
+        if (bool) {
+            schedule.add(new CarRepair(m, b));
+        }
+        return bool;
     }
     /** Returns an ArrayList containing the mechanic identifiers of all available mechanics,
      * as described in part (b).
      */
     public ArrayList<Integer> availableMechanics()
     {
-        ArrayList<Integer> arrList = new ArrayList<Integer>();
-       for(int i = 0; i< 6; i++)
-       {
-           for(int j = 0; j< schedule.size(); j++)
-           {
-               if(schedule.get(j).getMechanicNum() == i){arrList.add(i);}
-           }
-       }
-       return arrList;
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        for (int i = 0; i < numberOfMechanics; i ++) {
+            list.add(i);
+        }
+        for (int j = 0; j < list.size(); j++) {
+            for (int k = 0; k < schedule.size(); k++) {
+                if (schedule.get(k).getMechanicNum() == list.get(j)) {
+                    list.remove(k);
+                    k--;
+                }
+            }
+        }
+        return list;
     }
 
     /** Removes an element from schedule when a repair is complete. */
